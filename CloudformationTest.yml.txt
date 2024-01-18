@@ -1,0 +1,59 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Resources:
+  MyEC2Instance1:
+    Type: 'AWS::EC2::Instance'
+    Properties:
+      ImageId: ami-025a6a5beb74db87b
+      InstanceType: t2.micro
+      KeyName: CFTest
+      SecurityGroupIds: sg-03cae667d13a5a457
+      UserData: !Base64 
+        'Fn::Join':
+          - ''
+          - - |
+              #!/bin/bash -xe
+            - |
+              sudo yum update -y
+            - |
+              sudo yum install -y httpd
+            - |
+              sudo systemctl start httpd
+              sudo systemctl enable httpd
+  MyEC2Instance2:
+    Type: 'AWS::EC2::Instance'
+    Properties:
+      ImageId: ami-025a6a5beb74db87b
+      InstanceType: t2.micro
+      KeyName: CFTest
+      SecurityGroupIds: sg-03cae667d13a5a457
+      UserData: !Base64
+        'Fn::Join':
+          - ''
+          - - |
+              #!/bin/bash -xe
+            - |
+              sudo yum update -y
+            - |
+              sudo yum install -y httpd
+            - |
+              sudo systemctl start httpd
+              sudo systemctl enable httpd
+  MySecurityGroup:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      GroupDescription: Enable HTTP access
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+Parameters:
+  ImageId:
+    Type: String
+    Description: ami-025a6a5beb74db87b
+  InstanceType: t2.micro
+    Type: String
+    Description: t2.micro
+  KeyName:
+    Type: 'AWS::EC2::KeyPair::KeyName'
+    Description: CFTest
